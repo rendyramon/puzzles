@@ -18,7 +18,6 @@ public class CheckPerumtation{
       char characterI = secondString.charAt(i);
       if(charMap.containsKey(characterI)){
          int iCount = charMap.get(characterI);
-         if(iCount == 0) return false;
          if(iCount == 1) charMap.remove(characterI);
          else charMap.put(characterI, iCount - 1);
        }

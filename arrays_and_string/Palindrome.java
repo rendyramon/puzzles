@@ -14,7 +14,7 @@ public class Palindrome {
 
     // store all elements
     for(int i = 0; i < givenString.length(); i++){
-      char iChar = givenString.charAt(i);
+      char iChar = givenString.charAt(i).toLowerCase();
       if(iChar != ' '){
         if(charMap.containsKey(iChar))
           charMap.put(iChar, charMap.get(iChar) + 1);
