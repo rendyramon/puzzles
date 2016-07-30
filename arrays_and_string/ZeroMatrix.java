@@ -4,7 +4,7 @@ public class ZeroMatrix{
   private class Point{
     private final int x;
     private final int y;
-    
+
     public Point(int x, int y){
       this.x = x;
       this.y = y;
@@ -31,9 +31,12 @@ public class ZeroMatrix{
     int rowsNum = matrix.length;
 
     for(int i = 0; i < rowsNum; i++)
-      for(int j = 0; j < columnsNum; j++)
-        if(matrix[i][j] == 0)
+      for(int j = 0; j < columnsNum; j++){
+        if(matrix[i][j] == 0){
           zeroList.add(new Point(i, j));
+          break;
+        }
+      }
 
     for(Point point : zeroList) {
       setZeroRow(matrix, point.y, rowsNum);
