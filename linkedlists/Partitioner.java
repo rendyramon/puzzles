@@ -16,24 +16,27 @@ public class Partitioner{
     }
   }
 
-  public void partition(Node node, int value){
+  public Node partition(Node node, int value){
     boolean encounteredVal = false;
     Node head = node;
     if(head.data == value)
       encounteredVal = true;
 
-    while(head != null && head.next != null){
+    while(head.next != null){
       if(encounteredVal && head.next.data < value) {
         // move smaller element to the begining
         Node next = head.next;
         head.next = head.next.next;
         next.next = node;
         node = next;
-      } else if(head.next.data == value){
+      } else{
+        if(head.next.data == value)
           encounteredVal = true;
-          head = head.next;
+        head = head.next;
       }
     }
+
+    return node;
   }
 
   public static void main(String[] args){
@@ -41,10 +44,11 @@ public class Partitioner{
     node.next = new Node(5);
     node.next.next = new Node(3);
     node.next.next.next = new Node(4);
+    node.next.next.next.next = new Node(6);  
 
     node.print();
 
-    new Partitioner().partition(node, 5);
+    node = new Partitioner().partition(node, 5);
 
     node.print(); 
   }
