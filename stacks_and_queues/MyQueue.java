@@ -59,7 +59,7 @@ public class MyQueue<T>{
     addStack = new Stack<>();
     removeStack = new Stack<>();
   }
-  
+
   public void add(T item){
     addStack.push(item);
   }
@@ -91,7 +91,7 @@ public class MyQueue<T>{
   }
 
   public static void main(String[] args){
-    MyQueue myQueue = new MyQueue();
+    MyQueue<Integer> myQueue = new MyQueue<>();
     myQueue.add(1);
     myQueue.add(2);
     myQueue.add(3);
