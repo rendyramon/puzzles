@@ -1,4 +1,4 @@
-public class MinimalTree<T>{  
+public class MinimalTree<T extends Comparable<T>>{  
   public T item;
   public MinimalTree<T> left;
   public MinimalTree<T> right;
@@ -9,30 +9,32 @@ public class MinimalTree<T>{
   }
 
   public void insert(T item){
-    if(this.item > item)
-      left = insert(item, node.left);
+    if(this.item.compareTo(item) > 0)
+      left = insert(item, left);
     else
-      right = insert(item.node.right);
+      right = insert(item, right);
   }
 
   private MinimalTree<T> insert(T item, MinimalTree<T> node){
+    MinimalTree<T> newNode;
     if(node == null){
-      MinimalTree<T> newNode = new MinimalTree(item);
+      newNode = new MinimalTree(item);
       newNode.parent = node;
-      return new MinimalTree<>(item);
+      return newNode;
     }
 
-    if(node.item > node)
-        node.left = insert(item, node.left);
+    if(node.item.compareTo(item) > 0)
+        newNode = insert(item, node.left);
     else
-        node.right = insert(item, node.right);
+        newNode = insert(item, node.right);
     node.balance();
+    return newNode;
   }
   
   public int height(){
     int leftHeight = left == null? 0 : left.height();
     int rightHeight = right == null? 0 : right.height();
-    return (leftHeight > rightHeight : leftHeight : rightHeight) + 1;
+    return (leftHeight > rightHeight? leftHeight : rightHeight) + 1;
   }
 
   private void balance(){
@@ -50,50 +52,36 @@ public class MinimalTree<T>{
   }
 
   private void leftRotate(){
-    MinimalTree<T> nodeParent = node.parent;
-    MinimalTree<T> lastLeft;
-    MinimalTree<T> lastNode;
-    if(nodeParent.left == node){
-     lastNode = nodeParent.left;     
-     lastLeft = lastNode.left;
-     nodeParent.left = lastLeft;
-    } else{
-     lastNode = nodeParent.right;
-     lastLeft = lastNode.left;
-     nodeParent.right = lastLeft;
-    }
-    
-    MinimalTree<T> lastLeftRight = lastLeft.right;
-    lastLeft.right = lastNode;
-    lastNode.left = lastLeft;
+    // swap item
+    T lastItem = item;
+    item = left.item;
+    left.item = lastItem;
+
+    // move left right to left
+    MinimalTree<T> lastLeftRight = left.right;
+    left.right = null; 
+    left.right = lastLeftRight;
   }
 
   private void rightRotate(){
-    MinimalTree<T> nodeParent = node.parent;
-    MinimalTree<T> lastRight;
-    MinimalTree<T> lastNode;
-    if(nodeParent.left == node){
-     lastNode = nodeParent.left;     
-     lastRight = lastNode.right;
-     nodeParent.left = lastRight;
-    } else{
-     lastNode = nodeParent.right;
-     lastRight = lastNode.right;
-     nodeParent.right = lastRight;
-    }
+    // swap item
+    T lastItem = item;
+    item = right.item;
+    right.item = lastItem;
 
-    MinimalTree<T> lastRightLeft = lastRight.left;
-    lastRight.left = lastNode;
-    lastNode.right = lastRightLeft;
+    // move right left to right
+    MinimalTree<T> lastRightLeft = right.left;
+    right.left = null; 
+    right.right = lastRightLeft;
   }
 
   public static void main(String[] args){
-    MinimalTree<T> minimalTree = new MinimalTree(5);
+    MinimalTree<Integer> minimalTree = new MinimalTree(5);
     minimalTree.insert(6);
     minimalTree.insert(7);
     minimalTree.insert(8);
     minimalTree.insert(9);
 
-    System.out.println(minimalTree.height);
+    System.out.println(minimalTree.height());
   }
 }
