@@ -4,13 +4,13 @@ public class MultiplyXPlusOne{
 
   Map<Integer, Integer> solutionMap;
   public MultiplyXPlusOne(){
-    solutionMap = new HashMap<>();
+    solutionMap = new HashMap<Integer, Integer>();
   }
   public int minimalSteps(int cardNumber, int changedCardNumber){
     if(changedCardNumber < cardNumber) return -1;
     solutionMap.put(cardNumber, 0);
 
-    for(int i = cardNumber; i < changedCardNumber; i++){
+    for(int i = cardNumber; i < changedCardNumber/2; i++){
       int xTwoPlusOne = multiplyTwoXPlusOne(i);
       int xThreePlusOne = multiplyThreeXPlusOne(i);
 
@@ -25,14 +25,13 @@ public class MultiplyXPlusOne{
         solutionMap.put(xThreePlusOne, -1);
       }
     }
-    
-    return solutionMap.get(changedCardNumber);
+    return solutionMap.containsKey(changedCardNumber)? solutionMap.get(changedCardNumber) : -1;
   }
 
   private void addToMap(int value, int previousSteps){
     if(solutionMap.containsKey(value)){
       int previousValue = solutionMap.get(value);
-      if(value > previousSteps + 1)
+      if(previousValue > previousSteps + 1 || previousValue == -1)
         solutionMap.put(value, previousSteps +1);
     } else{
       solutionMap.put(value, previousSteps +1);
