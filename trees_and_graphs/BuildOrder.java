@@ -1,15 +1,18 @@
 import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class BuildOrder{
   public static class Project{
     public char item;
     private Set<Project> dependsOn;
     private Set<Project> dependents;
+    public boolean visited;
 
     public Project(char item){
       this.item = item;
       dependsOn = new HashSet();
       dependents = new HashSet();
+      visited = false;
     }
 
     public void addDependsOn(Project project){
@@ -40,41 +43,57 @@ public class BuildOrder{
   }
 
   public void printBuildOrder(Set<Project> projects, Set<DependentPair> pairs) throws Exception {
+    if(projects.size() == 0) return;
+
     for(DependentPair pair : pairs){
       pair.dependent.addDependsOn(pair.dependsOn);
       pair.dependsOn.addDependents(pair.dependent);
     }
+    
+    printUnreachables(projects);
+    if(projects.size() == 0) return;
 
-    Set<Project> occured = new HashSet<Project>();
+    Project firstProject = findFirstProject(projects.iterator().next());
+    if(firstProject == null) throw new Exception();
 
-    for(Project project : projects)
+    printBuildOrderStep(firstProject);
+  }
+
+  private void printUnreachables(Set<Project> projects){
+    Iterator<Project> iter = projects.iterator();
+    while(iter.hasNext()){
+      Project project = iter.next();
       if(project.getDependents().size() == 0 && project.getDependsOn().size() == 0){
         System.out.println(project.item);
-        occured.add(project);
+        iter.remove();
       }
-
-    Project firstProject = null;
-    for(Project project : projects)
-      if(!occured.contains(project) && project.getDependsOn().size() == 0)
-        firstProject = project;
-
-    if(firstProject == null) throw new Exception();
-    printBuildOrderStep(firstProject, occured, projects);
+    }
+  }
+  private void printBuildOrderStep(Project project) throws Exception{
+    Queue<Project> projectsQueue = new ConcurrentLinkedQueue();
+    projectsQueue.add(project);
+    while(!projectsQueue.isEmpty()){
+      Project currentProject = projectsQueue.remove();
+      System.out.println(currentProject.item);
+      currentProject.visited = true;
+      for(Project dependent : currentProject.getDependents())
+        if(!dependent.visited){
+          dependent.visited = true;
+          projectsQueue.add(dependent);
+        }
+    }
   }
 
-  private void printBuildOrderStep(Project project, Set<Project> occured, Set<Project> projects) throws Exception{
-    System.out.println(project.item);
-    occured.add(project);
-    if(projects.size() == occured.size()) return;
-    Project nextProject = findNextProject(projects, occured);
-    if(nextProject == null) throw new Exception();
-    printBuildOrderStep(nextProject, occured, projects);
-  }
-
-  private Project findNextProject(Set<Project> projects, Set<Project> occured){
-    for(Project project : projects){
-      if(!occured.contains(project) && occured.containsAll(project.getDependsOn())){
-        return project;
+  private Project findFirstProject(Project project){
+    Stack<Project> projectsStack = new Stack<>();
+    projectsStack.push(project);
+    while (!projectsStack.isEmpty()) {
+      Project currentProject = projectsStack.pop();
+      if(currentProject.getDependsOn().size() == 0)
+        return currentProject;
+      else{
+        for(Project dependsOn : currentProject.getDependsOn())
+          projectsStack.push(dependsOn);
       }
     }
     return null;
