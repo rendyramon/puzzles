@@ -2,17 +2,23 @@ import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class BuildOrder{
+  public static enum State{
+    VISITED,
+    VISITING,
+    UNVISITED;
+  }
+
   public static class Project{
     public char item;
     private Set<Project> dependsOn;
     private Set<Project> dependents;
-    public boolean visited;
+    public State visited;
 
     public Project(char item){
       this.item = item;
       dependsOn = new HashSet();
       dependents = new HashSet();
-      visited = false;
+      visited = State.UNVISITED;
     }
 
     public void addDependsOn(Project project){
@@ -75,11 +81,13 @@ public class BuildOrder{
     while(!projectsQueue.isEmpty()){
       Project currentProject = projectsQueue.remove();
       System.out.println(currentProject.item);
-      currentProject.visited = true;
+      currentProject.visited = State.VISITED;
       for(Project dependent : currentProject.getDependents())
-        if(!dependent.visited){
-          dependent.visited = true;
+        if(dependent.visited == State.UNVISITED){
+          dependent.visited = State.VISITING;
           projectsQueue.add(dependent);
+        } else if(dependent.visited == State.VISITED){
+          throw new Exception();
         }
     }
   }
