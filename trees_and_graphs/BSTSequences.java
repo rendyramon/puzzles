@@ -29,39 +29,34 @@ public class BSTSequences{
       int treeSize = size();
       List<List<TreeNode>> results = new ArrayList<List<TreeNode>>();
       List<TreeNode> result = new ArrayList<TreeNode>();
-      Stack<TreeNode> orderStack = new Stack<TreeNode>();
-      orderStack.push(this);
-      getBSTSequencesStep(results, result, orderStack, treeSize, resultsSize);
+      List<TreeNode> validNext = new ArrayList<>();
+      validNext.add(this);
+      getBSTSequencesStep(results, result, validNext, treeSize);
       return results;
     }
 
     public void getBSTSequencesStep(List<List<TreeNode>> results,
                                     List<TreeNode> result,
-                                    Stack<TreeNode> orderStack,
+                                    List<TreeNode> validNext,
                                     int treeSize){
 
-      while(!orderStack.isEmpty()){
-        TreeNode head = orderStack.pop();
-        result.add(head);
-        if(head.left != null){
-          List<TreeNode> newSequence = new ArrayList<TreeNode>(result);
-          orderStack.push(head.left);
-          if(head.right != null)
-            orderStack.push(head.right);
-          getBSTSequencesStep(results, newSequence, orderStack, treeSize, resultsSize);
-        }
-
-        if(head.right != null){
-          List<TreeNode> newSequence = new ArrayList<TreeNode>(result);
-          orderStack.push(head.right);
-          if(head.left != null)
-            orderStack.push(head.left);
-          getBSTSequencesStep(results, newSequence, orderStack, treeSize, resultsSize);
-        }
-      }
       if(result.size() == treeSize){
         results.add(result);
         return;
+      }
+
+      for(int i = 0; i < validNext.size(); i++){
+        TreeNode head = validNext.get(i);
+        validNext.remove(i);
+        List<TreeNode> newSequence = new ArrayList<>(result);
+        List<TreeNode> newValidNext = new ArrayList<>(validNext);
+        newSequence.add(head);
+        if(head.left != null)
+          newValidNext.add(head.left);
+        if(head.right != null)
+          newValidNext.add(head.right);
+        getBSTSequencesStep(results, newSequence, newValidNext, treeSize);
+        validNext.add(i, head);
       }
     }
 
