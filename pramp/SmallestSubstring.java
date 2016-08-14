@@ -30,9 +30,10 @@ public class SmallestSubstring{
       if(uniqueCounter < arr.length) return null;
       else return str.substring(startIdx, idx);
     }
+
     int minEndIdx = idx;
     int endIdx = minEndIdx;
-
+    int minLength = minEndIdx - startIdx;
     /* 
       for every new character, check if its a mandotory character
       if it is a mandatory and it matches the start,
@@ -44,17 +45,21 @@ public class SmallestSubstring{
       char endChar = str.charAt(endIdx);
       if(countMap.containsKey(endChar)){
         int endCharCount = countMap.get(endChar);
-        if( str.charAt(startIdx) == endChar){
-          startIdx++;
-          char newStartChar = str.charAt(startIdx);
+        if(str.charAt(startIdx) == endChar){
+          int newStart = startIdx +1;
+          char newStartChar = str.charAt(newStart);
           while(!countMap.containsKey(newStartChar) || countMap.get(newStartChar) > 1){
             if(countMap.containsKey(newStartChar)){
               countMap.put(newStartChar, countMap.get(newStartChar)-1);
             }
-            startIdx++;
-            newStartChar = str.charAt(startIdx);
+            newStart++;
+            newStartChar = str.charAt(newStart);
           }
-          minEndIdx = endIdx+1;
+          if((endIdx + 1 - newStart) < minLength){
+            minEndIdx = endIdx+1;  
+            startIdx = newStart;
+            minLength = minEndIdx - startIdx;
+          } 
         } else{
           countMap.put(endChar, endCharCount+1);
         }
@@ -69,7 +74,8 @@ public class SmallestSubstring{
     System.out.println(smallestSubstring.smallestSubstring(new char[]{'x','y','z'}, "xyyzyzyxx"));
     System.out.println(smallestSubstring.smallestSubstring(new char[]{'x','y','z'}, "xyyzz"));
     System.out.println(smallestSubstring.smallestSubstring(new char[]{'x','y','z'}, "xyyyzz"));
-    System.out.println(smallestSubstring.smallestSubstring(new char[]{'x','y','z'}, "xywxyyzwyyxxzzzzzw"));
-    System.out.println(smallestSubstring.smallestSubstring(new char[]{'x','y','z'}, "xyz"));
+    System.out.println(smallestSubstring.smallestSubstring(new char[]{'x','y','z','w'}, "xywxyyzwyyxxzzzzzw"));
+    System.out.println(smallestSubstring.smallestSubstring(new char[]{'x','y','z','w'}, "xywxyyzwyyxxzzzzzw"));
+    System.out.println(smallestSubstring.smallestSubstring(new char[]{'x','y','z'}, "xyzdsadasds"));
   }
 }
