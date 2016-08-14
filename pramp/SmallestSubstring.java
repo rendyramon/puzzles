@@ -54,18 +54,22 @@ public class SmallestSubstring{
             startIdx++;
             newStartChar = str.charAt(startIdx);
           }
-          minEndIdx = endIdx;
+          minEndIdx = endIdx+1;
         } else{
           countMap.put(endChar, endCharCount+1);
         }
       }
       endIdx++;
     }
-    return str.substring(startIdx, minEndIdx+1);
+    return str.substring(startIdx, minEndIdx);
   }
 
   public static void main(String[] args){
     SmallestSubstring smallestSubstring = new SmallestSubstring();
-    System.out.println(smallestSubstring.smallestSubstring(new char[]{'x','y','z'}, "xyyzyzyx"));
+    System.out.println(smallestSubstring.smallestSubstring(new char[]{'x','y','z'}, "xyyzyzyxx"));
+    System.out.println(smallestSubstring.smallestSubstring(new char[]{'x','y','z'}, "xyyzz"));
+    System.out.println(smallestSubstring.smallestSubstring(new char[]{'x','y','z'}, "xyyyzz"));
+    System.out.println(smallestSubstring.smallestSubstring(new char[]{'x','y','z'}, "xywxyyzwyyxxzzzzzw"));
+    System.out.println(smallestSubstring.smallestSubstring(new char[]{'x','y','z'}, "xyz"));
   }
 }
