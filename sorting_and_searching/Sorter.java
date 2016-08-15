@@ -2,19 +2,54 @@ public class Sorter{
 
   public void mergeSort(int[] arr){
     int[] helper = new int[arr.length];
-    merge(arr, helper, 0, arr.length-1);
+    mergeSort(arr, helper, 0, arr.length-1);
   }
 
-  private void merge(int[] arr, int[] helper, int low, int high){
-    if(low < high){
-      int middle = (low + high)/2;
-      merge(arr, helper, low, middle);
-      merge(arr, helper, middle+1, high);
-      mergeSort(arr, helper, low, high);
+  public void quickSort(int[] arr){
+    quickSort(arr, 0, arr.length-1);
+  }
+
+  private void quickSort(int[] arr, int left, int right){
+    int index = partition(arr, left, right);
+    if(left < index-1){
+      quickSort(arr, left, index-1);
+    }
+    if(right > index){
+      quickSort(arr, index, right);
     }
   }
 
+  private int partition(int[] arr, int left, int right){
+    int pivot = arr[(left+right)/2];
+    while(left <= right){
+      while(arr[left] < pivot) left++;
+      while(arr[right] > pivot) right--;
+
+      if(left <= right){
+        swap(arr, left, right);
+        left++;
+        right--;
+      }
+    }
+    return left;
+  }
+
+  private void swap(int[] arr, int left, int right){
+    int temp = arr[left];
+    arr[left] = arr[right];
+    arr[right] = temp;
+  }
+
   private void mergeSort(int[] arr, int[] helper, int low, int high){
+    if(low < high){
+      int middle = (low + high)/2;
+      mergeSort(arr, helper, low, middle);
+      mergeSort(arr, helper, middle+1, high);
+      merge(arr, helper, low, high);
+    }
+  }
+
+  private void merge(int[] arr, int[] helper, int low, int high){
     for(int i = low; i <= high; i++){
       helper[i] = arr[i];
     }
@@ -46,6 +81,13 @@ public class Sorter{
     sorter.mergeSort(arr);
     for(int i = 0; i < arr.length; i++){
       System.out.print(arr[i]);
+    }
+    System.out.println();
+
+    int[] arrO = new int[]{4,2,3,4};
+    sorter.quickSort(arrO);
+    for(int i = 0; i < arrO.length; i++){
+      System.out.print(arrO[i]);
     }
     System.out.println();
   }
