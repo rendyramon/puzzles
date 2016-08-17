@@ -14,14 +14,14 @@
 # Improvements
 
 1. Parralism
-⋅⋅* put chuncks on different machines and sort individually.
-⋅⋅* use multithreading 
-⋅⋅* Asychronous Read/Write - While one chunck is being sorted, another can be merged.
-⋅⋅* Use fast network links to parrallise
+- put chuncks on different machines and sort individually.
+- use multithreading 
+- Asychronous Read/Write - While one chunck is being sorted, another can be merged.
+- Use fast network links to parrallise
 
 2. Hardware
-⋅⋅* Use more RAM to hold more data in memory at a time
-⋅⋅* Increase CPU speed and number of cores, RAM access latency, input/output bandwidth, disk read/write speed, disk seek time, and others.
+- Use more RAM to hold more data in memory at a time
+- Increase CPU speed and number of cores, RAM access latency, input/output bandwidth, disk read/write speed, disk seek time, and others.
 
 2. Software
-⋅⋅* Using Radix sort if possible
+- Using Radix sort if possible
