@@ -3,10 +3,8 @@ import java.util.*;
 public class PeeksAndValleys{
   
   public void peeksAndValleys(int[] arr){
-    int length = arr.length;
-    if(length <= 2) return;
     int pointer = 1;
-    while(pointer < length-1){
+    while(pointer < arr.length-1){
       if(!(arr[pointer] <= arr[pointer-1] && arr[pointer] <= arr[pointer+1])) {
         if(arr[pointer-1] > arr[pointer+1])
           swap(arr, pointer-1, pointer);
