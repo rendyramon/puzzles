@@ -4,7 +4,6 @@ public class TowersOfHanoi{
   public void moveStacks(int n, Stack<Integer> origin, Stack<Integer> destination,
                                                        Stack<Integer> buffer){
     if(n <= 0) return;
-
     moveStacks(n-1, origin, buffer, destination);
     destination.push(origin.pop());
     moveStacks(n-1, buffer, destination, origin);
