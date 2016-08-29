@@ -18,6 +18,7 @@ public class ClosestFinder{
       }
     }
   }
+  
   public static class NodeCantBeNullException extends Exception{
     public NodeCantBeNullException(){
       super();
